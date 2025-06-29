@@ -49,12 +49,6 @@ public class User {
     public void setId(Long ID){
         this.ID=ID;
     }
-    /**
-     *
-     * Betting Logic will come once Bet Class is created
-     *
-     *
-     */
 
 
 
