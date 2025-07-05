@@ -1,5 +1,6 @@
 package com.betting.backend.User;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
@@ -10,12 +11,19 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public User createUser(String Username, String Password, String Bio){
-        User user = new User(Username, Password, Bio);
-        return userRepository.save(user);
-
-
+    public User getUserbyID(Long ID){
+            User user = userRepository.findById(ID)
+        .orElseThrow(() -> new UserNotFoundException(ID));
+        return user;
     }
+    public User createUser(String username, String password, String bio, String heardFrom, String niche, String university) {
+        User user = new User(username, password, bio, heardFrom, niche, university);
+        return userRepository.save(user);
+    }
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public void deleteUser(Long ID){
         User user = userRepository.findById(ID)
         .orElseThrow(() -> new UserNotFoundException(ID));

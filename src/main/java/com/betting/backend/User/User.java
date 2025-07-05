@@ -6,24 +6,37 @@ import jakarta.persistence.*;
 @Entity(name="User")
 @Table(name="USERS")
 public class User {
+
     @Column(name="USERNAME",length=50,nullable=false,unique=false)
     private String username;
     @Column(name="PASSWORD",length=50,nullable=false,unique=false)
     private String password;
     @Column(name="BIO",length=50,nullable=false,unique=false)
     private String Bio;
+    @Column(name="HEARD_FROM")
+    private String heardFrom;
+
+    @Column(name="NICHE")
+    private String niche;
+
+    @Column(name="UNIVERSITY")
+    private String university;
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long ID;
+
     public User(){
         username="None";
         password="Not Created";
         Bio="Not Created";
     }
-    public User(String username,String password,String Bio){
+    public User(String username, String password, String bio, String heardFrom, String niche, String university){
         this.username=username;
         this.password=password;
-        this.Bio=Bio;
+        this.Bio=bio;
+        this.heardFrom=heardFrom;
+        this.niche=niche;
+        this.university=university;
     }
     public String getUsername(){
         return username;
