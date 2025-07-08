@@ -2,23 +2,41 @@ package com.betting.backend.User;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
+import java.util.Optional;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    public UserService(UserRepository userRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder password)
+     {
         this.userRepository = userRepository;
+        this.passwordEncoder=password;
     }
     public User getUserbyID(Long ID){
             User user = userRepository.findById(ID)
         .orElseThrow(() -> new UserNotFoundException(ID));
         return user;
     }
+    public User authenticateUser(String username, String rawPassword) {
+            User user = userRepository.findByUsername(username)
+        .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+    if (!passwordEncoder.matches(rawPassword, user.getpassword())) {
+        throw new RuntimeException("Invalid username or password");
+    }
+
+    return user;
+}
     public User createUser(String username, String password, String bio, String heardFrom, String niche, String university) {
-        User user = new User(username, password, bio, heardFrom, niche, university);
-        return userRepository.save(user);
+
+        String encodedPassword = passwordEncoder.encode(password);
+        User user = new User(username, encodedPassword, bio, heardFrom, niche, university);
+        userRepository.save(user);
+        return user;
     }
     public List<User> getAllUsers() {
         return userRepository.findAll();

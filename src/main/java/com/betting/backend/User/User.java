@@ -7,11 +7,11 @@ import jakarta.persistence.*;
 @Table(name="USERS")
 public class User {
 
-    @Column(name="USERNAME",length=50,nullable=false,unique=false)
+    @Column(name="USERNAME",length=255,nullable=false,unique=false)
     private String username;
-    @Column(name="PASSWORD",length=50,nullable=false,unique=false)
+    @Column(name="PASSWORD",length=255,nullable=false,unique=false)
     private String password;
-    @Column(name="BIO",length=50,nullable=false,unique=false)
+    @Column(name="BIO",length=255,nullable=false,unique=false)
     private String Bio;
     @Column(name="HEARD_FROM")
     private String heardFrom;
@@ -38,9 +38,19 @@ public class User {
         this.niche=niche;
         this.university=university;
     }
+    public String getUniversity() {
+    return this.university;
+}
+    public String getHeardFrom() {
+    return this.heardFrom;
+}
     public String getUsername(){
         return username;
     }
+    public String getNiche() {
+    return this.niche;
+}
+
     public String getBio(){
         return Bio;
     }
