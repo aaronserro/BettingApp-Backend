@@ -21,21 +21,36 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
+    /**
+     * This class configures Spring Security, handles JWT auth, permits access to login endpoints and protects all other endpoints unless a valid token is provided
+     * again this filter checks for a valid token on every request
+     *
+     */
+    private final JwtAuthenticationFilter jwtAuthFilter;//this injects the Auth Filter for the JWT tokens
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {//Constructor for security config class
         this.jwtAuthFilter = jwtAuthFilter;
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        /**
+         * this is used internally to authenticate user credentials during login
+         */
         return config.getAuthenticationManager();
 }
     @Bean
     public PasswordEncoder passwordEncoder() {
+        /**
+         * this method encrypts passwords to compare encrypter values
+         */
         return new BCryptPasswordEncoder();
     }
     @Bean
 public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
+    /**
+     * allows the frontend to access the backend and avoid CORS errors in the browser
+     */
+    CorsConfiguration configuration = new CorsConfiguration();//creating a new cors config obejct
+    //setting all componsnets in the configuration
     configuration.setAllowedOrigins(List.of("http://localhost:5173"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of("*"));
@@ -47,6 +62,9 @@ public CorsConfigurationSource corsConfigurationSource() {
 
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    /**
+     * this configures Spring Security to desable CSRF, enable CORS assign public/private routes stateless session and add JWT filter
+     */
     http
         .csrf(csrf -> csrf.disable())
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
