@@ -1,6 +1,12 @@
 package com.betting.backend.games.sudoku.model;
 
 public class SudokuBoard {
+    /**
+     * This is a very simple class that initializes the board with 0's as well as a fixed board that will track whether the number is
+     * created by the computer or not, along with the various getters and setters that go along with it
+     *
+     *
+     */
     private int [][] board;
     private boolean [][]fixedBoard;
     public SudokuBoard(){
