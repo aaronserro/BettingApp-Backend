@@ -11,4 +11,4 @@ COPY . .
 RUN ./mvnw clean package -DskipTests
 
 # Run the app (replace 'your-app.jar' with your JAR's real name)
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"]
