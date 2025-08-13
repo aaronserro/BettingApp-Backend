@@ -30,47 +30,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * checks and validates the token and makes sure it is secure
      *
      */
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
+protected void doFilterInternal(HttpServletRequest request,
+                                HttpServletResponse response,
+                                FilterChain filterChain)
         throws ServletException, IOException {
 
-        // 1. Get the Authorization header
-        final String authHeader = request.getHeader("Authorization");
+    String path = request.getRequestURI();
 
-        String username = null;
-        String jwt = null;
-            /**
-             * the term bearer means that the clients 'bears' a token
-             *
-             *
-             *
-             */
-        // 2. Check if the header starts with "Bearer "
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7); // Strip "Bearer "
-            username = jwtUtil.extractUsername(jwt);
-        }
-
-        // 3. If we got a username and the user isn’t already authenticated
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-            // 4. Validate token
-            if (jwtUtil.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-
-                // 5. Set user as authenticated
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
-
-        // 6. Pass the request along the filter chain
+    // Skip auth for public endpoints
+    if (path.equals("/auth/login") || path.equals("/users/create")) {
         filterChain.doFilter(request, response);
+        return;
     }
+
+    final String authHeader = request.getHeader("Authorization");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // No token → just continue unauthenticated; security rules will decide
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    String jwt = authHeader.substring(7);
+    String username = null;
+    try {
+        username = jwtUtil.extractUsername(jwt);  // may throw on bad/expired token
+    } catch (Exception e) {
+        // Bad token → proceed without authentication (do not 403 here)
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if (jwtUtil.validateToken(jwt, userDetails)) {
+            UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+        }
+    }
+
+    filterChain.doFilter(request, response);
+}
+
 }

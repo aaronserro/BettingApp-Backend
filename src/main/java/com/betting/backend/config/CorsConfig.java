@@ -23,7 +23,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")//applies cors rules to all endponts
-                        .allowedOrigins("http://localhost:5173")//only allows requests from the React frontend server
+                        .allowedOrigins("http://localhost:5173","https://app-frontend-69hr.onrender.com")//only allows requests from the React frontend server
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")//allows HTTP methods to be used across all origins
                         .allowedHeaders("*")//allows any headers in requests
                         .allowCredentials(true);//Allows the sending of cookies of JWT tokens
