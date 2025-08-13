@@ -25,7 +25,7 @@ public class UserService {
             User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-    if (!passwordEncoder.matches(rawPassword, user.getpassword())) {
+    if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
         throw new RuntimeException("Invalid username or password");
     }
 
@@ -61,7 +61,7 @@ public class UserService {
         User user = userRepository.findById(ID)
         .orElseThrow(() -> new UserNotFoundException(ID));
 
-    user.setpassword(Password);
+    user.setPassword(Password);
     userRepository.save(user);
     return user;
     }
