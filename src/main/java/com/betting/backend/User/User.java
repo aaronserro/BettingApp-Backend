@@ -50,7 +50,6 @@ public class User {
     public String getNiche() {
     return this.niche;
 }
-
     public String getBio(){
         return Bio;
     }

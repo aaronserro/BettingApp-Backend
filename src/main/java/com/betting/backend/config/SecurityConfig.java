@@ -51,7 +51,7 @@ public CorsConfigurationSource corsConfigurationSource() {
      */
     CorsConfiguration configuration = new CorsConfiguration();//creating a new cors config obejct
     //setting all componsnets in the configuration
-    configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+    configuration.setAllowedOrigins(List.of("http://localhost:5173","https://app-frontend-69hr.onrender.com/"));
     configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(List.of("*"));
     configuration.setAllowCredentials(true);
