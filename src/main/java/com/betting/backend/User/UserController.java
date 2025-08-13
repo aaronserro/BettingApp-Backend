@@ -27,7 +27,7 @@ public class UserController {
 public void createUser(@RequestBody User user) {
     userService.createUser(
         user.getUsername(),
-        user.getpassword(),
+        user.getPassword(),
         user.getBio(),
         user.getHeardFrom(),
         user.getNiche(),
