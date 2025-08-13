@@ -71,6 +71,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.POST, "/auth/login").permitAll()
             .requestMatchers("/auth/login", "/users/create", "/users").permitAll()
             .anyRequest().authenticated()
 
