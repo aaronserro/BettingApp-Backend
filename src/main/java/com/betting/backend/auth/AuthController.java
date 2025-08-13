@@ -40,10 +40,12 @@ public class AuthController {
          *
          */
 
-        User user = userService.authenticateUser(request.getUsername(), request.getPassword());
-
-        String token = jwtUtil.generateToken(user.getUsername());
-
-        return ResponseEntity.ok(new AuthResponse(token));
+  try {
+    User user = userService.authenticateUser(request.getUsername(), request.getPassword());
+    String token = jwtUtil.generateToken(user.getUsername());
+    return ResponseEntity.ok(new AuthResponse(token));
+  } catch (RuntimeException ex) {
+    return ResponseEntity.status(401).body(java.util.Map.of("error", "Invalid username or password"));
+  }
     }
 }

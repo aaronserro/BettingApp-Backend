@@ -47,6 +47,7 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .requestMatchers("/auth/**").permitAll()
         .requestMatchers(HttpMethod.POST, "/users/create").permitAll()
+        .requestMatchers(org.springframework.http.HttpMethod.GET, "/users/all").permitAll()
         .anyRequest().authenticated()
       )
       .exceptionHandling(e -> e.authenticationEntryPoint(
