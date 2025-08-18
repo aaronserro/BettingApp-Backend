@@ -1,14 +1,19 @@
+// src/main/java/com/betting/backend/BackendApplication.java
 package com.betting.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-@SpringBootApplication
-@ComponentScan(basePackages = "com.betting.backend")
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+
+@SpringBootApplication(
+  exclude = {
+    DataSourceAutoConfiguration.class,
+    HibernateJpaAutoConfiguration.class
+  }
+)
 public class BackendApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(BackendApplication.class, args);
+  }
 }
